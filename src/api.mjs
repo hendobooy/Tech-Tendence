@@ -51,10 +51,33 @@ const start = async () => {
                     title: 'Tech Tendence API',
                     description: 'Documentação das rotas do plano de carreira.',
                     version: '1.0.0'
-                }
+                },
+                components: {
+                    securitySchemes: {
+                        bearerAuth: {
+                            type: 'http',
+                            scheme: 'bearer',
+                            bearerFormat: 'JWT'
+                        }
+                    }
+                },
+                security: [{ bearerAuth: [] }]
             }
         });
+
         await app.register(swaggerUi, { routePrefix: '/docs' });
+
+        // --- TRAVA DE SEGURANÇA GLOBAL ---
+        app.addHook('preHandler', async (request, reply) => {
+            if (request.url.startsWith('/docs')) return;
+
+            const authHeader = request.headers.authorization;
+            const tokenEsperado = `Bearer ${process.env.API_SECRET_TOKEN}`;
+
+            if (!authHeader || authHeader !== tokenEsperado) {
+                return reply.status(401).send({ erro: "Acesso Negado: Token ausente ou inválido." });
+            }
+        });
 
         // --- ROTAS PADRÃO ---
         app.get('/api/panorama-salarial', {

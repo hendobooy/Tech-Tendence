@@ -53,12 +53,14 @@ export default function FloatingChat() {
 
         try {
             const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+            const apiToken = import.meta.env.VITE_API_TOKEN; // Puxa a senha
 
             const response = await fetch(`${baseUrl}/api/chat-ia`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "ngrok-skip-browser-warning": "true"
+                    "ngrok-skip-browser-warning": "true",
+                    "Authorization": `Bearer ${apiToken}` // Envia a senha
                 },
                 body: JSON.stringify({ mensagens: novoHistorico, perfil })
             });

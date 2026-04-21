@@ -22,12 +22,14 @@ export default function App() {
   const finalizarChat = async (perfilData) => {
     try {
       const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+      const apiToken = import.meta.env.VITE_API_TOKEN;
 
       const resposta = await fetch(`${baseUrl}/api/gerar-insights`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "ngrok-skip-browser-warning": "true"
+          "ngrok-skip-browser-warning": "true",
+          "Authorization": `Bearer ${apiToken}`
         },
         body: JSON.stringify(perfilData)
       });
