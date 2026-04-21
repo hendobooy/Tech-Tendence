@@ -1,7 +1,7 @@
 # 🚀 TechTendence - Mentor de Carreira Inteligente
 
 ![TechTendence Status](https://img.shields.io/badge/Status-Desenvolvimento-green?style=for-the-badge)
-![TechTendence AI](https://img.shields.io/badge/AI-OpenAI%20GPT--4o-blue?style=for-the-badge)
+![TechTendence AI](https://img.shields.io/badge/AI-OpenAI%20GPT--5--nano-blue?style=for-the-badge)
 ![TechTendence Framework](https://img.shields.io/badge/Framework-React-cyan?style=for-the-badge)
 
 **TechTendence** é um ecossistema inteligente projetado para guiar profissionais de tecnologia em suas jornadas de evolução ou transição de carreira. Através de uma arquitetura robusta que combina Inteligência Artificial e dados reais de mercado, o app gera roadmaps personalizados com cursos validados, salários atualizados e insights de demanda.
