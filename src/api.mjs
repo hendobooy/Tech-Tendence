@@ -69,7 +69,15 @@ const start = async () => {
 
         // --- TRAVA DE SEGURANÇA GLOBAL ---
         app.addHook('preHandler', async (request, reply) => {
+            // Permite requisições de documentação e preflight do CORS (sem auth)
             if (request.url.startsWith('/docs')) return;
+            if (request.method === 'OPTIONS') return;
+
+            // Se a variável de ambiente não estiver definida, ignora a autenticação
+            if (!process.env.API_SECRET_TOKEN) {
+                app.log.warn('⚠️ API_SECRET_TOKEN não definido — autenticação desabilitada.');
+                return;
+            }
 
             const authHeader = request.headers.authorization;
             const tokenEsperado = `Bearer ${process.env.API_SECRET_TOKEN}`;
