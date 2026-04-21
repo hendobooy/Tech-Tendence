@@ -162,6 +162,7 @@ const start = async () => {
 
                 let planoEstrategico = null;
                 let iteracoes = 0;
+                let totalVagasDaArea = 0; // Capturado diretamente do resultado do MCP
 
                 while (iteracoes < 4) {
                     const response = await openai.chat.completions.create({
@@ -184,7 +185,20 @@ const start = async () => {
                         const args = JSON.parse(toolCall.function.arguments);
                         app.log.info({ tool: args }, `🤖 Fase 1: Chamou ${toolCall.function.name}`);
                         const toolResult = await client.callTool({ name: toolCall.function.name, arguments: args });
-                        mensagensEstrategista.push({ tool_call_id: toolCall.id, role: "tool", name: toolCall.function.name, content: toolResult.content[0].text });
+                        const toolText = toolResult.content[0].text;
+
+                        // Captura o total de vagas da área ANTES da IA ter chance de distorcer
+                        if (toolCall.function.name === 'listar_techs_em_alta') {
+                            try {
+                                const mcpData = JSON.parse(toolText);
+                                if (mcpData.total_vagas_analisadas) {
+                                    totalVagasDaArea = mcpData.total_vagas_analisadas;
+                                    app.log.info(`📊 Vagas da área capturadas: ${totalVagasDaArea}`);
+                                }
+                            } catch { /* se não for JSON válido, ignora */ }
+                        }
+
+                        mensagensEstrategista.push({ tool_call_id: toolCall.id, role: "tool", name: toolCall.function.name, content: toolText });
                     }
                     iteracoes++;
                 }
@@ -288,7 +302,7 @@ const start = async () => {
 
                 const resultadoFinal = {
                     compatibilidade: estruturaIA.compatibilidade || 85,
-                    vagasDisponiveis: planoEstrategico.vagasDisponiveis || "Sem Dados",
+                    vagasDisponiveis: totalVagasDaArea > 0 ? totalVagasDaArea : (planoEstrategico.vagasDisponiveis || "Sem Dados"),
                     salario: planoEstrategico.salario,
                     techs: planoEstrategico.techs_mercado,
                     recomendacoes: (estruturaIA.recomendacoes || []).map((rec, idx) => {
@@ -301,7 +315,7 @@ const start = async () => {
 
                         // Distribui os cursos pelas semanas de forma equilibrada
                         const cursosComRecursos = semanas.map((semana, sIdx) => {
-                            const cursosParaEstaSemana = cursos.filter((_, cIdx) => 
+                            const cursosParaEstaSemana = cursos.filter((_, cIdx) =>
                                 cIdx % totalSemanas === sIdx
                             );
 
@@ -446,7 +460,7 @@ const start = async () => {
 
                             if (cursos.length > 0) {
                                 // Formata como Markdown diretamente para o chat
-                                const cursosMarkdown = cursos.map(c => 
+                                const cursosMarkdown = cursos.map(c =>
                                     `- [${c.nome_curso}](${c.link}) *(${c.tipo_curso}, ${c.carga_horaria}h)*`
                                 ).join('\n');
                                 toolResultText = `Cursos encontrados na base de dados:\n${cursosMarkdown}`;
