@@ -45,10 +45,3 @@ scrapers/importar_github.mjs
 *.njsproj
 *.sln
 *.sw?
-
-# Tudo que envolve o fly
-
-.github/workflows/*
-fly.toml
-Dockerfile
-.dockerignore

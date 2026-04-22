@@ -44,7 +44,11 @@ const start = async () => {
         const db = await iniciarBanco();
 
         // 2. Registra Plugins
-        await app.register(cors);
+        await app.register(cors, {
+            origin: ['https://tech-tendence.vercel.app', 'http://localhost:5173'],
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['Content-Type', 'Authorization']
+        });
         await app.register(swagger, {
             openapi: {
                 info: {
@@ -530,8 +534,9 @@ const start = async () => {
         });
 
         // 3. Inicializa o servidor
-        await app.listen({ port: process.env.PORT || 8080, host: '0.0.0.0' });
+        await app.listen({ port: 3001 });
         console.log('🚀 API Online e conectada ao SQLite!');
+        console.log('📖 Documentação: http://localhost:3001/docs');
 
     } catch (err) {
         app.log.error(err);
