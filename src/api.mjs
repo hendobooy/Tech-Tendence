@@ -44,11 +44,7 @@ const start = async () => {
         const db = await iniciarBanco();
 
         // 2. Registra Plugins
-        await app.register(cors, {
-            origin: ['https://tech-tendence.vercel.app', 'http://localhost:5173'],
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            allowedHeaders: ['Content-Type', 'Authorization']
-        });
+        await app.register(cors);
         await app.register(swagger, {
             openapi: {
                 info: {
