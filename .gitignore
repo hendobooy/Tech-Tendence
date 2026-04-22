@@ -28,6 +28,7 @@ db/*.sqlite
 db/*.db
 db/*.sqlite3
 
+
 # Laboratorios de teste
 src/teste-prompt.mjs
 scrapers/importar_github.mjs
@@ -44,3 +45,10 @@ scrapers/importar_github.mjs
 *.njsproj
 *.sln
 *.sw?
+
+# Tudo que envolve o fly
+
+.github/workflows/*
+fly.toml
+Dockerfile
+.dockerignore

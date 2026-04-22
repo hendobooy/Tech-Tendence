@@ -530,9 +530,8 @@ const start = async () => {
         });
 
         // 3. Inicializa o servidor
-        await app.listen({ port: 3001 });
+        await app.listen({ port: process.env.PORT || 8080, host: '0.0.0.0' });
         console.log('🚀 API Online e conectada ao SQLite!');
-        console.log('📖 Documentação: http://localhost:3001/docs');
 
     } catch (err) {
         app.log.error(err);

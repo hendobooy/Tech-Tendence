@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import cron from 'node-cron';
-import { analisarVaga } from './ai_scrap.js';
-import { iniciarBanco, salvarVaga } from './db.mjs';
+import { analisarVaga } from '../src/ai_scrap.js';
+import { iniciarBanco, salvarVaga } from '../src/db.mjs';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
