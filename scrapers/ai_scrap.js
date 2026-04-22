@@ -1,16 +1,16 @@
-require('dotenv').config({ path: './.env' });
-const { OpenAI } = require('openai');
+import 'dotenv/config';
+import { OpenAI } from 'openai';
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function analisarVaga(titulo, descricao) {
+export async function analisarVaga(titulo, descricao) {
     console.log(`🧠 IA analisando: ${titulo}...`);
 
     try {
         const resposta = await openai.chat.completions.create({
-            model: "gpt-5.4-nano",
+            model: "gpt-5-nano",
             messages: [
                 {
                     role: "system",
@@ -28,10 +28,9 @@ async function analisarVaga(titulo, descricao) {
                     content: `Vaga: ${titulo}\nDescrição: ${descricao}`
                 }
             ],
-            temperature: 0.1, // Quase zero para a IA não "inventar" coisas
+            temperature: 1,
         });
 
-        // Transforma o texto do GPT em um objeto Javascript real
         const dadosEstruturados = JSON.parse(resposta.choices[0].message.content);
         return dadosEstruturados;
 
@@ -40,6 +39,3 @@ async function analisarVaga(titulo, descricao) {
         return null;
     }
 }
-
-
-module.exports = { analisarVaga };

@@ -30,6 +30,8 @@ db/*.sqlite3
 
 # Laboratorios de teste
 src/teste-prompt.mjs
+scrapers/importar_github.mjs
+
 
 
 # Editores e Sistema Operacional
